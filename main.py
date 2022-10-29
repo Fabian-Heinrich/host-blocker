@@ -13,7 +13,7 @@ args = parser.parse_args()
 
 blocker = HostBlocker(args.blocklist)
 
-if args.activate:
+if args.enable:
     blocker.enable()
 elif args.disable:
     blocker.disable()
