@@ -2,32 +2,33 @@ import os
 
 class HostBlocker:
 
-    hostfile_path = os.path.dirname('C:\\Windows\\System32\\drivers\\etc\\')
-    hostfile_name = 'hosts'
+    hostfile_path = os.path.abspath('C:\\Windows\\System32\\drivers\\etc\\hosts')
+
+    def __init__(self, blocklist_path) -> None:
+        self.blocklist_path = os.path.abspath(blocklist_path)
 
     def activate(self):
         hostfile_without_blocker = self.remove_host_blocker_block(self.get_hostfile_buffer())
         hostfile_with_blocker = self.add_host_blocker_block(hostfile_without_blocker)
         
-        with open(os.path.join(self.hostfile_path, self.hostfile_name), 'w') as hostfile_handle_write:
+        with open(self.hostfile_path, 'w') as hostfile_handle_write:
             hostfile_handle_write.writelines(hostfile_with_blocker)
 
-    def deactivate(self):
+    def disable(self):
         hostfile_without_blocker = self.remove_host_blocker_block(self.get_hostfile_buffer())
 
-        with open(os.path.join(self.hostfile_path, self.hostfile_name), 'w') as hostfile_handle_write:
+        with open(self.hostfile_path, 'w') as hostfile_handle_write:
             hostfile_handle_write.writelines(hostfile_without_blocker)
 
 
     def get_hostfile_buffer(self):
-        with open(os.path.join(self.hostfile_path, self.hostfile_name), 'r') as hostfile_handle_read:
+        with open(self.hostfile_path, 'r') as hostfile_handle_read:
             hostfile_buffer = hostfile_handle_read.readlines()
 
         return hostfile_buffer
 
     def get_blocked_hosts(self):
-        blocklist_name = 'blocklist.config'
-        with open(blocklist_name, 'r') as blocklist_handle_read:
+        with open(self.blocklist_path, 'r') as blocklist_handle_read:
             blocklist_buffer = blocklist_handle_read.readlines()
             blocked_hosts = [line.strip() for line in blocklist_buffer]
         return blocked_hosts

@@ -1,12 +1,19 @@
+import argparse
 from HostBlocker import HostBlocker
 
-blocker = HostBlocker()
+parser = argparse.ArgumentParser(
+    description='Takes a blocklist of hosts and writes or deletes those from the hosts file.'
+    )
 
-print("1: to activate, 2: to deactivate")
-choice = int(input())
+parser.add_argument('-bl', '--blocklist', required=True, help='Filepath to list of hosts to block')
+parser.add_argument('-a', '--activate', action='store_true', help='Enable block list. Requires blocklist.')
+parser.add_argument('-d', '--disable', action='store_true', help='Disable block list')
 
-if choice == 1:
+args = parser.parse_args()
+
+blocker = HostBlocker(args.blocklist)
+
+if args.activate:
     blocker.activate()
-
-if choice == 2:
-    blocker.deactivate()
+elif args.disable:
+    blocker.disable()
