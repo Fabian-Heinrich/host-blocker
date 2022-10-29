@@ -7,7 +7,7 @@ class HostBlocker:
     def __init__(self, blocklist_path) -> None:
         self.blocklist_path = os.path.abspath(blocklist_path)
 
-    def activate(self):
+    def enable(self):
         hostfile_without_blocker = self.remove_host_blocker_block(self.get_hostfile_buffer())
         hostfile_with_blocker = self.add_host_blocker_block(hostfile_without_blocker)
         
